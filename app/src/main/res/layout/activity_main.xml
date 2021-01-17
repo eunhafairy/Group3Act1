@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@drawable/gradient_background">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="299dp"
+                android:layout_height="129dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="80dp"
+                android:src="@drawable/rosterlogo" />
+
+
+
+            <EditText
+                android:id="@+id/uname"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:drawableLeft="@drawable/ic_baseline_account_circle_24"
+                android:background="@color/white"
+                android:padding="5dp"
+
+                android:hint="Enter Username"
+                android:textSize="15dp"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:inputType="textPassword"
+
+                android:id="@+id/pword"
+                android:layout_width="280dp"
+                android:drawableLeft="@drawable/ic_baseline_lock_24"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:background="@color/white"
+                android:textSize="15dp"
+                android:hint="Enter Password"
+                android:padding="5dp"
+                android:textColor="@color/black" />
+            <LinearLayout
+
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:padding="5dp"
+                    android:id="@+id/loginBtn"
+                    android:layout_width="115dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:text="Login"
+                    android:textSize="15dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:textSize="15dp"
+                    android:padding="5dp"
+                    android:layout_weight="1"
+                    android:id="@+id/registerBtn"
+                    android:layout_width="115dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:backgroundTint="@color/white"
+                    android:text="Register"
+                    android:textColor="@color/black" />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"></LinearLayout>
+
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
