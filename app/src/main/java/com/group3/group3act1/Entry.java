@@ -1,8 +1,14 @@
 package com.group3.group3act1;
 
-public class Entry {
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.widget.ImageView;
 
-    private int entryImage;
+import java.io.File;
+
+public class Entry implements Parcelable {
+
+    File entryImage;
     private String entryName;
     private String entryRemark;
     private String entryGender;
@@ -11,7 +17,7 @@ public class Entry {
     private String entryHobbies;
     private String otherInformation;
 
-    public Entry(int entryImage, String entryName, String entryRemark, String entryGender, String entryAddress, String entryContact, String entryHobbies, String otherInformation) {
+    public Entry(File entryImage, String entryName, String entryRemark, String entryGender, String entryAddress, String entryContact, String entryHobbies, String otherInformation) {
         this.setEntryImage(entryImage);
         this.setEntryName(entryName);
         this.setEntryRemark(entryRemark);
@@ -23,11 +29,33 @@ public class Entry {
     }
 
 
-    public int getEntryImage() {
+    protected Entry(Parcel in) {
+        entryName = in.readString();
+        entryRemark = in.readString();
+        entryGender = in.readString();
+        entryAddress = in.readString();
+        entryContact = in.readString();
+        entryHobbies = in.readString();
+        otherInformation = in.readString();
+    }
+
+    public static final Creator<Entry> CREATOR = new Creator<Entry>() {
+        @Override
+        public Entry createFromParcel(Parcel in) {
+            return new Entry(in);
+        }
+
+        @Override
+        public Entry[] newArray(int size) {
+            return new Entry[size];
+        }
+    };
+
+    public File getEntryImage() {
         return entryImage;
     }
 
-    public void setEntryImage(int entryImage) {
+    public void setEntryImage(File entryImage) {
         this.entryImage = entryImage;
     }
 
@@ -85,5 +113,21 @@ public class Entry {
 
     public void setOtherInformation(String otherInformation) {
         this.otherInformation = otherInformation;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(entryName);
+        dest.writeString(entryRemark);
+        dest.writeString(entryGender);
+        dest.writeString(entryAddress);
+        dest.writeString(entryContact);
+        dest.writeString(entryHobbies);
+        dest.writeString(otherInformation);
     }
 }
