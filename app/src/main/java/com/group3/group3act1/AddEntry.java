@@ -3,12 +3,17 @@ package com.group3.group3act1;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -16,6 +21,8 @@ import android.widget.RadioGroup;
 
 public class AddEntry extends AppCompatActivity {
 
+
+    Context c = this;
     //button
     Button submitBtn;
     //edit text
@@ -23,9 +30,12 @@ public class AddEntry extends AppCompatActivity {
     RadioGroup gender;
     RadioButton male, female, other;
 
+    //datepicker
+    DatePickerDialog datePickerDialog;
+
     //imageview
     ImageView imgView;
-
+    Bitmap img;
     //request code
     final int REQUEST_CODE_CAMERA_ADD_ENTRY = 3;
 
@@ -57,14 +67,22 @@ public class AddEntry extends AppCompatActivity {
 
         //init radio group and buttons
         gender = (RadioGroup) findViewById(R.id.addentry_rg);
-        male = (RadioButton) findViewById(R.id.rb_m);
-        female = (RadioButton) findViewById(R.id.rb_f);
-        other = (RadioButton) findViewById(R.id.rb_o);
+        male = (RadioButton) findViewById(R.id.addEntry_rbMale);
+        female = (RadioButton) findViewById(R.id.addEntry_rbFemale);
+        other = (RadioButton) findViewById(R.id.addEntry_rbOthers);
 
         //image view
         imgView = (ImageView) findViewById(R.id.addEntry_imgView);
+        img = BitmapFactory.decodeFile("/");
 
+        //for bday datepicker
 
+        datePickerDialog = new DatePickerDialog(c, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                birthDate.setText((month+1)+"/"+(dayOfMonth)+"/"+(year));
+            }
+        },1990,1,1);
 
     }
     private  void reg(){
@@ -84,14 +102,21 @@ public class AddEntry extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
-                }
-                Entry newEntry = new Entry(imgView, name.getText().toString(),position.getText().toString(),
+                Entry newEntry = new Entry(img, name.getText().toString(),position.getText().toString(), birthDate.getText().toString(),
                         genderHolder, address.getText().toString(), contactInfo.getText().toString(), hobbies.getText().toString(),
                         otherInfo.getText().toString());
+                Intent data = new Intent();
+                data.putExtra("image", img);
+                data.putExtra("Entry", (Parcelable) newEntry);
+                setResult(RESULT_OK, data);
+                finish();
+
+
+                }
 
 
         });
+
 
         //radio group
         male.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +138,14 @@ public class AddEntry extends AppCompatActivity {
             }
         });
 
+        //datepickerdialog show
+        birthDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePickerDialog.show();
+            }
+        });
+
     }
 
     @Override
@@ -120,7 +153,7 @@ public class AddEntry extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_CODE_CAMERA_ADD_ENTRY && resultCode == RESULT_OK){
             Bundle extras = data.getExtras();
-            Bitmap img = (Bitmap) extras.get("data");
+            img = (Bitmap) extras.get("data");
             imgView.setImageBitmap(img);
 
 

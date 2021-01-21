@@ -1,26 +1,32 @@
 package com.group3.group3act1;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.ImageView;
 
 import java.io.File;
 
-public class Entry implements Parcelable {
+public class Entry implements Parcelable{
 
-    File entryImage;
+    private Bitmap entryImage;
     private String entryName;
     private String entryRemark;
+
+
+
+    private String birthdate;
     private String entryGender;
     private String entryAddress;
     private String entryContact;
     private String entryHobbies;
     private String otherInformation;
 
-    public Entry(File entryImage, String entryName, String entryRemark, String entryGender, String entryAddress, String entryContact, String entryHobbies, String otherInformation) {
+    public Entry(Bitmap entryImage, String entryName, String entryRemark, String birthdate, String entryGender, String entryAddress, String entryContact, String entryHobbies, String otherInformation) {
         this.setEntryImage(entryImage);
         this.setEntryName(entryName);
         this.setEntryRemark(entryRemark);
+        this.setBirthdate(birthdate);
         this.setEntryGender(entryGender);
         this.setEntryAddress(entryAddress);
         this.setEntryContact(entryContact);
@@ -39,6 +45,7 @@ public class Entry implements Parcelable {
         otherInformation = in.readString();
     }
 
+
     public static final Creator<Entry> CREATOR = new Creator<Entry>() {
         @Override
         public Entry createFromParcel(Parcel in) {
@@ -51,11 +58,19 @@ public class Entry implements Parcelable {
         }
     };
 
-    public File getEntryImage() {
+    public String getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public Bitmap getEntryImage() {
         return entryImage;
     }
 
-    public void setEntryImage(File entryImage) {
+    public void setEntryImage(Bitmap entryImage) {
         this.entryImage = entryImage;
     }
 
@@ -115,6 +130,7 @@ public class Entry implements Parcelable {
         this.otherInformation = otherInformation;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -122,8 +138,12 @@ public class Entry implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+
+
         dest.writeString(entryName);
         dest.writeString(entryRemark);
+        dest.writeParcelable(entryImage, flags);
+        dest.writeString(birthdate);
         dest.writeString(entryGender);
         dest.writeString(entryAddress);
         dest.writeString(entryContact);

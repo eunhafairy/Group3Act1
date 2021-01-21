@@ -83,6 +83,7 @@
                     android:drawableLeft="@drawable/ic_baseline_date_range_24"
                     android:hint="Enter date"
                     android:layout_gravity="center"
+                    android:editable="false"
                     android:gravity="center"/>
 
 
@@ -150,7 +151,6 @@
                 android:id="@+id/addEntry_hobbyEdit"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
                 android:textSize="20sp"
                 android:gravity="center"
                 android:layout_marginTop="10dp"
@@ -161,7 +161,6 @@
                 android:id="@+id/addEntry_otherInfoEdit"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
                 android:textSize="20sp"
                 android:gravity="center"
                 android:layout_marginTop="10dp"

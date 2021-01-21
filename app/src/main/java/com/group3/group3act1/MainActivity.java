@@ -33,9 +33,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        accountList.add(new Account("Anna","13579abcdeA","Anna Lisa"));
-        accountList.add(new Account("Lorna","Th3Q4ickBr0wnF0x","Lorna Dee"));
-        accountList.add(new Account("_Fe_","p@zzW0rd","Fe Rari"));
+        accountList.add(new Account("Anna", "13579abcdeA", "Anna Lisa"));
+        accountList.add(new Account("Lorna", "Th3Q4ickBr0wnF0x", "Lorna Dee"));
+        accountList.add(new Account("_Fe_", "p@zzW0rd", "Fe Rari"));
         eTxt_username = (EditText) findViewById(R.id.uname);
         eTxt_password = (EditText) findViewById(R.id.pword);
         bt_Login = (Button) findViewById(R.id.loginBtn);
@@ -48,7 +48,9 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(c);
 
 
-         if(v.getId()== R.id.loginBtn){
+            if (v.getId() == R.id.loginBtn) {
+                //FOR DEBUG, REMOVE COMMENT ONCE FINISHED
+           /*
              if ((eTxt_username.getText().toString().equals(accountList.get(0).getUsername()) && eTxt_password.getText().toString().equals(accountList.get(0).getPassword())) ||
                      (eTxt_username.getText().toString().equals(accountList.get(1).getUsername()) && eTxt_password.getText().toString().equals(accountList.get(1).getPassword())) ||
                      (eTxt_username.getText().toString().equals(accountList.get(2).getUsername()) && eTxt_password.getText().toString().equals(accountList.get(2).getPassword()))) {
@@ -75,7 +77,15 @@ public class MainActivity extends AppCompatActivity {
 
 
          }
-         else if(v.getId() == R.id.registerBtn){
+         */
+                Toast.makeText(MainActivity.this, "login successful", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(c, EntryListScreen.class);
+
+                startActivity(i);
+            }
+
+            //ADD ELSE IF HERE
+            if (v.getId() == R.id.registerBtn) {
                 builder.setTitle("Alert")
                         .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                             @Override
@@ -90,12 +100,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-
-
-
-
         }
 
 
     };
 }
+
+
+

@@ -12,6 +12,7 @@
         android:orientation="horizontal"
         android:layout_weight="1">
         <ImageView
+            android:id="@+id/i_imgBack"
             android:layout_width="30dp"
             android:layout_height="match_parent"
             android:src="@drawable/back"
@@ -26,18 +27,242 @@
             android:text="Entry Page"
             android:layout_weight="3"
             android:textSize="40sp"/>
-
-
     </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="8"
+
         >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/i_img"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:src="@drawable/pfp"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/i_textName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Name of individual"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:visibility="visible" />
+            <TextView
+                android:id="@+id/i_textPos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Position"
+                android:textSize="20sp"
+                android:visibility="visible" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Birthday"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:visibility="visible"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/i_textBday"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="0/0/0"
+                    android:textSize="20sp"
+                    android:visibility="visible"
+                    android:layout_weight="1"/>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Gender"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:visibility="visible"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/i_textGender"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Male"
+                    android:textSize="20sp"
+                    android:visibility="visible"
+                    android:layout_weight="1"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Address"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:visibility="visible"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/i_textAddress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Complete Address"
+                    android:textSize="20sp"
+                    android:visibility="visible"
+                    android:layout_weight="1"/>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Contact Number"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:visibility="visible"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/i_textContact"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="09XXXXXXXXX"
+                    android:textSize="20sp"
+                    android:visibility="visible"
+                    android:layout_weight="1"/>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Birthday"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:visibility="visible"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="0/0/0"
+                    android:textSize="20sp"
+                    android:visibility="visible"
+                    android:layout_weight="1"/>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Hobbies"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:visibility="visible"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/i_textHobbies"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Your hobbies"
+                    android:textSize="20sp"
+                    android:visibility="visible"
+                    android:layout_weight="1"/>
+
+
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Other Information"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"
+                android:visibility="visible"
+                />
+            <TextView
+                android:id="@+id/i_textOther"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="--"
+                android:textSize="20sp"
+                android:visibility="visible"
+                />
+
+
+
+        </LinearLayout>
 
 
     </ScrollView>
+
     <Button
+        android:id="@+id/i_btnBack"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

@@ -38,7 +38,7 @@ public class TheCustomRVAdapter extends RecyclerView.Adapter<TheCustomRVAdapter.
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         Entry entry = entryList.get(position);
-        holder.entryImage.setImageResource(entry.getEntryImage());
+        holder.entryImage.setImageBitmap(entry.getEntryImage());
         holder.nameText.setText(entry.getEntryName());
         holder.remarkText.setText(entry.getEntryRemark());
 
