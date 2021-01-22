@@ -2,8 +2,10 @@ package com.group3.group3act1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,7 +32,9 @@ public class IndividualEntry extends AppCompatActivity {
 
     }
     private void init(){
-
+        Intent i = getIntent();
+        Bundle extras = i.getExtras();
+        Entry individualEntry = extras.getParcelable("Entry");
         //initialize edit text
         nameText = (TextView) findViewById(R.id.i_textName);
         positionText = (TextView) findViewById(R.id.i_textPos);
@@ -40,6 +44,16 @@ public class IndividualEntry extends AppCompatActivity {
         contactText = (TextView) findViewById(R.id.i_textContact);
         hobbyText = (TextView) findViewById(R.id.i_textHobbies);
         otherinfoText = (TextView) findViewById(R.id.i_textOther);
+
+        //set text
+        nameText.setText(individualEntry.getEntryName().toString());
+        positionText.setText(individualEntry.getEntryRemark().toString());
+        birthDateText.setText(individualEntry.getBirthdate().toString());
+        genderText.setText(individualEntry.getEntryGender().toString());
+        addressText.setText(individualEntry.getEntryAddress().toString());
+        contactText.setText(individualEntry.getEntryContact().toString());
+        hobbyText.setText(individualEntry.getEntryHobbies().toString());
+        otherinfoText.setText(individualEntry.getOtherInformation().toString());
 
         //initialize button
         backButton = (Button) findViewById(R.id.i_btnBack);
@@ -53,6 +67,18 @@ public class IndividualEntry extends AppCompatActivity {
     }
     private void reg(){
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        backImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 }

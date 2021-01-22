@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".EditEntry">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Edit Entry"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="30sp"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/editEntry_imgView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/pfp"
+                android:layout_gravity="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Take a Photo"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+
+            <EditText
+                android:id="@+id/editEntry_nameEdit"
+                android:layout_width="350dp"
+                android:layout_height="40dp"
+                android:drawableLeft="@drawable/ic_baseline_account_circle_24"
+                android:layout_marginTop="10dp"
+                android:textSize="20sp"
+                android:hint="Enter Name (required)"
+
+                android:layout_gravity="center"
+                android:gravity="center"/>
+            <EditText
+                android:id="@+id/editEntry_remarkEdit"
+                android:layout_width="350dp"
+                android:layout_height="40dp"
+                android:textSize="20sp"
+                android:drawableLeft="@drawable/position"
+                android:layout_marginTop="10dp"
+                android:hint="Enter position (required)"
+                android:layout_gravity="center"
+                android:gravity="center"/>
+            <LinearLayout
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+
+                    android:layout_gravity="center"
+                    android:text="Birthdate"/>
+                <EditText
+                    android:id="@+id/editEntry_bdayEdit"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="40dp"
+                    android:textSize="20sp"
+                    android:drawableLeft="@drawable/ic_baseline_date_range_24"
+                    android:hint="Enter date"
+                    android:layout_gravity="center"
+                    android:editable="false"
+                    android:gravity="center"/>
+
+
+            </LinearLayout>
+            <RadioGroup
+                android:id="@+id/editEntry_rg"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Gender"
+                    android:layout_gravity="center"
+
+                    android:textSize="20sp"/>
+                <RadioButton
+                    android:id="@+id/editEntry_rbMale"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Male"
+                    android:textSize="15sp"/>
+                <RadioButton
+                    android:id="@+id/editEntry_rbFemale"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Female"
+                    android:textSize="15sp"/>
+                <RadioButton
+                    android:id="@+id/editEntry_rbOthers"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Others"
+                    android:textSize="15sp"/>
+
+            </RadioGroup>
+            <EditText
+                android:id="@+id/editEntry_addressEdit"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:drawableLeft="@drawable/location"
+                android:hint="Complete Address"/>
+            <EditText
+                android:id="@+id/editEntry_contactEdit"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_baseline_perm_contact_calendar_24"
+                android:hint="Contact"/>
+            <EditText
+                android:id="@+id/editEntry_hobbyEdit"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/hobbies"
+                android:hint="Hobbies"/>
+            <EditText
+                android:id="@+id/editEntry_otherInfoEdit"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_baseline_format_align_justify_24"
+                android:hint="Other information"/>
+
+        </LinearLayout>
+
+
+
+    </ScrollView>
+    <Button
+        android:id="@+id/editEntry_submitButton"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Submit"/>
+
+
+</LinearLayout>

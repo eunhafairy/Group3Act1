@@ -1,13 +1,19 @@
 package com.group3.group3act1;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
@@ -18,6 +24,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 public class AddEntry extends AppCompatActivity {
 
@@ -33,6 +42,8 @@ public class AddEntry extends AppCompatActivity {
     //datepicker
     DatePickerDialog datePickerDialog;
 
+    //String to hold error message
+    String errorMessage = "";
     //imageview
     ImageView imgView;
     Bitmap img;
@@ -51,7 +62,8 @@ public class AddEntry extends AppCompatActivity {
         reg();
 
     }
-    private void init(){
+
+    private void init() {
 
         //init button
         submitBtn = (Button) findViewById(R.id.addEntry_submitButton);
@@ -80,13 +92,16 @@ public class AddEntry extends AppCompatActivity {
         datePickerDialog = new DatePickerDialog(c, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                birthDate.setText((month+1)+"/"+(dayOfMonth)+"/"+(year));
+                birthDate.setText((month + 1) + "/" + (dayOfMonth) + "/" + (year));
             }
-        },1990,1,1);
+        }, 1990, 1, 1);
 
     }
-    private  void reg(){
 
+    private void reg() {
+
+        //builder for alert dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
 
         //profile pic
         imgView.setOnClickListener(new View.OnClickListener() {
@@ -102,17 +117,63 @@ public class AddEntry extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Entry newEntry = new Entry(img, name.getText().toString(),position.getText().toString(), birthDate.getText().toString(),
-                        genderHolder, address.getText().toString(), contactInfo.getText().toString(), hobbies.getText().toString(),
-                        otherInfo.getText().toString());
-                Intent data = new Intent();
-                data.putExtra("image", img);
-                data.putExtra("Entry", (Parcelable) newEntry);
-                setResult(RESULT_OK, data);
-                finish();
-
+                if (isEmpty(name)) {
+                    errorMessage += "Name\n";
 
                 }
+                if (isEmpty(position)) {
+                    errorMessage += "Position\n";
+
+                }
+                if (isEmpty(birthDate)) {
+                    errorMessage += "Birthdate\n";
+
+                }
+                if (gender.getCheckedRadioButtonId() == -1) {
+                    errorMessage += "Gender\n";
+
+                }
+                if (isEmpty(hobbies)) {
+                    errorMessage += "Hobbies\n";
+
+                }
+                if (errorMessage.trim().length() > 0) {
+                    builder.setTitle("Error")
+                            .setMessage("Plese enter the following:\n" + errorMessage)
+                            .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //code here
+                                }
+                            })
+                            .setCancelable(true);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    errorMessage = "";
+
+
+                } else {
+
+
+                    Intent data = new Intent();
+                    data.putExtra("Image", "");
+
+
+                    data.putExtra("Name", name.getText().toString());
+                    data.putExtra("Position", position.getText().toString());
+                    data.putExtra("Birthday", birthDate.getText().toString());
+                    data.putExtra("Gender", genderHolder);
+                    data.putExtra("Address", address.getText().toString());
+                    data.putExtra("Contact", contactInfo.getText().toString());
+                    data.putExtra("Hobbies", hobbies.getText().toString());
+                    data.putExtra("Other", otherInfo.getText().toString());
+
+
+                    errorMessage = "";
+                    setResult(RESULT_OK, data);
+                    finish();
+                }
+            }
 
 
         });
@@ -151,7 +212,7 @@ public class AddEntry extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CODE_CAMERA_ADD_ENTRY && resultCode == RESULT_OK){
+        if (requestCode == REQUEST_CODE_CAMERA_ADD_ENTRY && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             img = (Bitmap) extras.get("data");
             imgView.setImageBitmap(img);
@@ -159,4 +220,20 @@ public class AddEntry extends AppCompatActivity {
 
         }
     }
+
+    private boolean isEmpty(EditText etxt) {
+        {
+            if (etxt.getText().toString().trim().length() > 0) {
+                return false;
+            }
+
+
+            return true;
+
+
+        }
+
+
+    }
+
 }

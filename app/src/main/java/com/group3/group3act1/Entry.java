@@ -1,20 +1,13 @@
 package com.group3.group3act1;
 
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.widget.ImageView;
 
-import java.io.File;
+public class Entry implements Parcelable {
 
-public class Entry implements Parcelable{
-
-    private Bitmap entryImage;
+    private String entryImage;
     private String entryName;
     private String entryRemark;
-
-
-
     private String birthdate;
     private String entryGender;
     private String entryAddress;
@@ -22,7 +15,7 @@ public class Entry implements Parcelable{
     private String entryHobbies;
     private String otherInformation;
 
-    public Entry(Bitmap entryImage, String entryName, String entryRemark, String birthdate, String entryGender, String entryAddress, String entryContact, String entryHobbies, String otherInformation) {
+    public Entry(String entryImage, String entryName, String entryRemark, String birthdate, String entryGender, String entryAddress, String entryContact, String entryHobbies, String otherInformation) {
         this.setEntryImage(entryImage);
         this.setEntryName(entryName);
         this.setEntryRemark(entryRemark);
@@ -36,15 +29,16 @@ public class Entry implements Parcelable{
 
 
     protected Entry(Parcel in) {
+        entryImage = in.readString();
         entryName = in.readString();
         entryRemark = in.readString();
+        birthdate = in.readString();
         entryGender = in.readString();
         entryAddress = in.readString();
         entryContact = in.readString();
         entryHobbies = in.readString();
         otherInformation = in.readString();
     }
-
 
     public static final Creator<Entry> CREATOR = new Creator<Entry>() {
         @Override
@@ -58,19 +52,11 @@ public class Entry implements Parcelable{
         }
     };
 
-    public String getBirthdate() {
-        return birthdate;
-    }
-
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
-    }
-
-    public Bitmap getEntryImage() {
+    public String getEntryImage() {
         return entryImage;
     }
 
-    public void setEntryImage(Bitmap entryImage) {
+    public void setEntryImage(String entryImage) {
         this.entryImage = entryImage;
     }
 
@@ -88,6 +74,14 @@ public class Entry implements Parcelable{
 
     public void setEntryRemark(String entryRemark) {
         this.entryRemark = entryRemark;
+    }
+
+    public String getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
     }
 
     public String getEntryGender() {
@@ -130,7 +124,6 @@ public class Entry implements Parcelable{
         this.otherInformation = otherInformation;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -138,11 +131,9 @@ public class Entry implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
-
+        dest.writeString(entryImage);
         dest.writeString(entryName);
         dest.writeString(entryRemark);
-        dest.writeParcelable(entryImage, flags);
         dest.writeString(birthdate);
         dest.writeString(entryGender);
         dest.writeString(entryAddress);
