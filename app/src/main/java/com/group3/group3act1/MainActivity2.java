@@ -354,8 +354,15 @@ public class MainActivity2 extends AppCompatActivity {
                             .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Intent i = new Intent(c, MainActivity.class);
-                                    startActivity(i);
+
+                                    Intent data = new Intent();
+                                    data.putExtra("Username", eTxt_un.getText().toString());
+                                    data.putExtra("Password", eTxt_pw.getText().toString());
+                                    data.putExtra("Name", eTxt_firstname.getText().toString());
+                                    errorMessage = "";
+                                    setResult(RESULT_OK, data);
+                                    finish();
+
                                 }
                             })
                             .setCancelable(true);

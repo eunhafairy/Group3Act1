@@ -11,6 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:background="@drawable/gradient_background"
+        android:textColor="@color/white"
         android:text="Add Entry"
         android:gravity="center"
         android:textStyle="bold"
@@ -178,6 +180,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="Submit"/>
+        android:backgroundTint="#434343"
+        android:textColor="@color/white"
+        android:textSize= "25sp"
+        android:text="Submit Entry"/>
 
 </LinearLayout>

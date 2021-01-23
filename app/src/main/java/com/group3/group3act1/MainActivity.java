@@ -1,5 +1,6 @@
 package com.group3.group3act1;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    final int REQUEST_CODE_FOR_REGISTRATION = 143;
     ArrayList<Account> accountList = new ArrayList<>();
     EditText eTxt_username, eTxt_password;
     Button bt_Login, bt_Reg;
@@ -50,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
 
             if (v.getId() == R.id.loginBtn) {
+
+                /*
 
              if (eTxt_username.getText().toString().equals(accountList.get(0).getUsername()) &&
                      eTxt_password.getText().toString().equals(accountList.get(0).getPassword()))
@@ -86,29 +90,39 @@ public class MainActivity extends AppCompatActivity {
                  Intent i = new Intent(c, EntryListScreen.class);
                  i.putExtra("Name", accountList.get(3).getName().toString());
                  startActivity(i);
+*/
+                for(int i = 0; i < accountList.size(); i++){
+
+                    if(eTxt_username.getText().toString().equals(accountList.get(i).getUsername()) && eTxt_password.getText().toString().equals(accountList.get(i).getPassword())){
+
+                        Toast.makeText(MainActivity.this, "login successful", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(c, EntryListScreen.class);
+                        intent.putExtra("Name", accountList.get(i).getName());
+                        startActivity(intent);
+                        return;
+
+                    }
+                    else if(i == (accountList.size()-1)){
+
+
+                        builder.setTitle("Alert")
+                                .setMessage("The username or password is incorrect.")
+                                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //code
+                                    }
+                                })
+                                .setCancelable(true);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+
+                    }
+
+                }
+
 
              }
-             else {
-
-                 builder.setTitle("Alert")
-                         .setMessage("The username or password is incorrect.")
-                         .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-                             @Override
-                             public void onClick(DialogInterface dialog, int which) {
-                                 //code
-                             }
-                         })
-                         .setCancelable(true);
-                 AlertDialog dialog = builder.create();
-                 dialog.show();
-             }
-
-
-
-
-
-            }
-
 
             else if (v.getId() == R.id.registerBtn) {
                 builder.setTitle("Alert")
@@ -116,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent i = new Intent(c, MainActivity2.class);
-                                startActivity(i);
+                                startActivityForResult(i,REQUEST_CODE_FOR_REGISTRATION);
                             }
                         })
                         .setMessage("Going to registration page");
@@ -129,6 +143,21 @@ public class MainActivity extends AppCompatActivity {
 
 
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_FOR_REGISTRATION && resultCode == RESULT_OK){
+            Bundle extras = data.getExtras();
+            String _username = extras.getString("Username");
+            String _password = extras.getString("Password");
+            String _name = extras.getString("Name");
+            Account _account = new Account(_username, _password, _name);
+            accountList.add(_account);
+
+
+        }
+    }
 }
 
 

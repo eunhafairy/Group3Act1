@@ -9,24 +9,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@drawable/gradient_background"
         android:orientation="horizontal"
         android:layout_weight="1">
         <ImageView
             android:id="@+id/i_imgBack"
-            android:layout_width="30dp"
+            android:layout_width="0dp"
+            android:layout_margin="10dp"
             android:layout_height="match_parent"
-            android:src="@drawable/back"
-            android:layout_gravity="left"
+            android:src="@drawable/arrow_white"
             android:layout_weight="1"
             />
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="10dp"
             android:layout_gravity="center"
-
+            android:textColor="@color/white"
             android:text="Entry Page"
             android:layout_weight="3"
-            android:textSize="40sp"/>
+            android:textSize="30sp"/>
     </LinearLayout>
 
     <ScrollView
@@ -177,33 +179,7 @@
 
 
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Birthday"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:visibility="visible"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="0/0/0"
-                    android:textSize="20sp"
-                    android:visibility="visible"
-                    android:layout_weight="1"/>
 
-
-            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -266,6 +242,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:textColor="@color/white"
+        android:backgroundTint="#434343"
+        android:textSize="25sp"
         android:text="Go back"/>
 
 </LinearLayout>

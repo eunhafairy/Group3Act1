@@ -22,7 +22,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class EditEntry extends AppCompatActivity {
-
+    Entry tempEntry;
     int position;
     Context c = this;
     //TextViews
@@ -56,12 +56,14 @@ public class EditEntry extends AppCompatActivity {
         reg();
 
     }
-    private void init(){
+
+    private void init() {
 
 
         Intent i = getIntent();
         Bundle extras = i.getExtras();
         position = extras.getInt("Position");
+        tempEntry = extras.getParcelable("Entry");
         //Initialize TextViews
         name = (EditText) findViewById(R.id.editEntry_nameEdit);
         remark = (EditText) findViewById(R.id.editEntry_remarkEdit);
@@ -71,11 +73,36 @@ public class EditEntry extends AppCompatActivity {
         hobby = (EditText) findViewById(R.id.editEntry_hobbyEdit);
         otherinfo = (EditText) findViewById(R.id.editEntry_otherInfoEdit);
 
+        //set edit tex to the selected entry's value
+        name.setText(tempEntry.getEntryName());
+        remark.setText(tempEntry.getEntryRemark());
+        birthday.setText(tempEntry.getBirthdate());
+        gender = tempEntry.getEntryGender();
+        address.setText(tempEntry.getEntryAddress());
+        contact.setText(tempEntry.getEntryContact());
+        hobby.setText(tempEntry.getEntryHobbies());
+        otherinfo.setText(tempEntry.getOtherInformation());
+
+
         //Radio
         rg_editEntry = (RadioGroup) findViewById(R.id.editEntry_rg);
         rb_Female = (RadioButton) findViewById(R.id.editEntry_rbFemale);
         rb_Male = (RadioButton) findViewById(R.id.editEntry_rbMale);
         rb_Others = (RadioButton) findViewById(R.id.editEntry_rbOthers);
+
+        //set gender
+        if(gender.equals("M")|| gender.equals("Male")){
+         rg_editEntry.check(rb_Male.getId());
+
+        }
+        else if(gender.equals("F") || gender.equals("Female")){
+            rg_editEntry.check(rb_Female.getId());
+
+        }
+        else{
+            rg_editEntry.check(rb_Others.getId());
+
+        }
 
 
         //date picker
@@ -94,8 +121,8 @@ public class EditEntry extends AppCompatActivity {
 
 
     }
-    private void reg(){
 
+    private void reg() {
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
@@ -139,13 +166,12 @@ public class EditEntry extends AppCompatActivity {
                     errorMessage = "";
 
 
-                }
-                else{
+                } else {
 
                     Intent data = new Intent();
                     data.putExtra("Image", "");
                     data.putExtra("Name", name.getText().toString());
-                    data.putExtra("Position", remark.getText().toString());
+                    data.putExtra("Remark", remark.getText().toString());
                     data.putExtra("Birthday", birthday.getText().toString());
                     data.putExtra("Gender", gender);
                     data.putExtra("Address", address.getText().toString());
@@ -161,7 +187,6 @@ public class EditEntry extends AppCompatActivity {
                 }
             }
         });
-
 
 
         pfp.setOnClickListener(new View.OnClickListener() {
@@ -202,32 +227,28 @@ public class EditEntry extends AppCompatActivity {
         });
 
 
-
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CODE_CAMERA_ADD_ENTRY && resultCode == RESULT_OK){
+        if (requestCode == REQUEST_CODE_CAMERA_ADD_ENTRY && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap img = (Bitmap) extras.get("data");
             pfp.setImageBitmap(img);
 
         }
     }
-    private boolean isEmpty(EditText etxt) {
+
+    //to check if edit text is empty
+    private boolean isEmpty(EditText etxt)
         {
             if (etxt.getText().toString().trim().length() > 0) {
                 return false;
             }
-
-
-            return true;
-
+        return true;
 
         }
 
-
-    }
 
 }
