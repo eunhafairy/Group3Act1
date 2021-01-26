@@ -3,16 +3,25 @@ package com.group3.group3act1;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,8 +29,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Date;
 
 public class EntryListScreen extends AppCompatActivity {
 
@@ -34,6 +48,9 @@ public class EntryListScreen extends AppCompatActivity {
     final int REQUEST_CODE = 1, REQUEST_CODE_FOR_EDIT = 2;
     TextView entryList_title;
     ImageView edtBtn, delBtn, logoff;
+
+    String mCurrentPhotoPath;
+    Uri mCurrentPhotoUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +78,33 @@ public class EntryListScreen extends AppCompatActivity {
 
 
          */
-        String imageUri_Faker = "drawable://fkr.png";
-        String imageUri_Huni = "drawable://huni.png";
-        String imageUri_Jkcylv = "drawable://jkcylv.png";
 
-        entryList.add(new Entry(imageUri_Faker, "Faker", "Mid Laner","02/04/1999","M","South Korea",
+
+
+
+
+
+//Given samples
+        entryList.add(new Entry("res/drawable/fkr.png",
+                "Faker",
+                "Mid Laner",
+                "02/04/1999",
+                "M",
+                "South Korea",
+                "09XXXXXXXXX",
+                "Playing Videogames",
+                "other information"));
+
+
+
+
+
+
+
+
+        entryList.add(new Entry("", "Huni", "Top Laner","12/25/1995","M","South Korea",
                 "09XXXXXXXXX","Playing Videogames","other information"));
-        entryList.add(new Entry(imageUri_Huni, "Huni", "Top Laner","12/25/1995","M","South Korea",
-                "09XXXXXXXXX","Playing Videogames","other information"));
-        entryList.add(new Entry(imageUri_Jkcylv, "Jackeylove", "AD Carry","07/23/2000","M","China",
+        entryList.add(new Entry("", "Jackeylove", "AD Carry","07/23/2000","M","China",
                 "09XXXXXXXXX","Playing Videogames","other information"));
 
 
@@ -218,6 +253,7 @@ public class EntryListScreen extends AppCompatActivity {
                 String _hobbiessEdit = extras.getString("Hobbies");
                 String _otherEdit = extras.getString("Other");
                 int position = extras.getInt("Position");
+                entryList.get(position).setEntryImage(_imageEdit);
                 entryList.get(position).setEntryName(_nameEdit);
                 entryList.get(position).setEntryRemark(_remarkEdt);
                 entryList.get(position).setBirthdate(_birthdateEdit);
@@ -233,6 +269,21 @@ public class EntryListScreen extends AppCompatActivity {
 
             }
 
+    private File createImage() throws Exception {
+        File tempPhoto = null;
+
+        String timeStamp = new SimpleDateFormat("yyyyMMDD_HHmmss").format(new Date());
+        String fileName = "IMG_" + timeStamp +"_";
+        File fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
+        tempPhoto = File.createTempFile(fileName,".png",fileDir);
+        mCurrentPhotoPath = tempPhoto.getAbsolutePath();
+
+        return tempPhoto;
+
+    }
 
 
-        }
+
+
+}

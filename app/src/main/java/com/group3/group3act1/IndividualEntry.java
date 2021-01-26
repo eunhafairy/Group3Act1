@@ -3,6 +3,7 @@ package com.group3.group3act1;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
@@ -36,6 +37,7 @@ public class IndividualEntry extends AppCompatActivity {
         Bundle extras = i.getExtras();
         Entry individualEntry = extras.getParcelable("Entry");
         //initialize edit text
+        pfpImg = (ImageView) findViewById(R.id.i_img);
         nameText = (TextView) findViewById(R.id.i_textName);
         positionText = (TextView) findViewById(R.id.i_textPos);
         birthDateText = (TextView) findViewById(R.id.i_textBday);
@@ -46,6 +48,7 @@ public class IndividualEntry extends AppCompatActivity {
         otherinfoText = (TextView) findViewById(R.id.i_textOther);
 
         //set text
+        pfpImg.setImageBitmap(BitmapFactory.decodeFile(individualEntry.getEntryImage()));
         nameText.setText(individualEntry.getEntryName().toString());
         positionText.setText(individualEntry.getEntryRemark().toString());
         birthDateText.setText(individualEntry.getBirthdate().toString());

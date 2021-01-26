@@ -3,13 +3,21 @@ package com.group3.group3act1;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.View;
@@ -21,7 +29,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class EditEntry extends AppCompatActivity {
+    private static final int REQ_CODE_WRITE_READ_PERMISSION = 123;
+    private static final int REQ_CODE_CAMERA = 124;
     Entry tempEntry;
     int position;
     Context c = this;
@@ -43,8 +57,10 @@ public class EditEntry extends AppCompatActivity {
     //REQUEST CODE
     final int REQUEST_CODE_CAMERA_ADD_ENTRY = 12;
 
-    //String to hold error message
+    //Strings
     String errorMessage = "";
+    Uri mCurrentPhotoUri;
+    String mCurrentPhotoPath = "";
 
 
     @Override
@@ -65,6 +81,7 @@ public class EditEntry extends AppCompatActivity {
         position = extras.getInt("Position");
         tempEntry = extras.getParcelable("Entry");
         //Initialize TextViews
+        pfp = (ImageView) findViewById(R.id.editEntry_imgView);
         name = (EditText) findViewById(R.id.editEntry_nameEdit);
         remark = (EditText) findViewById(R.id.editEntry_remarkEdit);
         birthday = (EditText) findViewById(R.id.editEntry_bdayEdit);
@@ -74,6 +91,7 @@ public class EditEntry extends AppCompatActivity {
         otherinfo = (EditText) findViewById(R.id.editEntry_otherInfoEdit);
 
         //set edit tex to the selected entry's value
+        pfp.setImageBitmap(BitmapFactory.decodeFile(tempEntry.getEntryImage()));
         name.setText(tempEntry.getEntryName());
         remark.setText(tempEntry.getEntryRemark());
         birthday.setText(tempEntry.getBirthdate());
@@ -169,7 +187,10 @@ public class EditEntry extends AppCompatActivity {
                 } else {
 
                     Intent data = new Intent();
-                    data.putExtra("Image", "");
+                    if(!mCurrentPhotoPath.equals("")){
+                        data.putExtra("Image", mCurrentPhotoPath);
+                    }
+
                     data.putExtra("Name", name.getText().toString());
                     data.putExtra("Remark", remark.getText().toString());
                     data.putExtra("Birthday", birthday.getText().toString());
@@ -193,9 +214,35 @@ public class EditEntry extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(camera, REQUEST_CODE_CAMERA_ADD_ENTRY);
+
+                File tempImage = null;
+                try {
+                    tempImage = createImage();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (tempImage != null) {
+                    Uri uriImage = FileProvider.getUriForFile(c,
+                            "com.group3.group3act1.fileprovider",
+                            tempImage);
+                    mCurrentPhotoUri = uriImage;
+                    camera.putExtra(MediaStore.EXTRA_OUTPUT, uriImage);
+
+                    if (ContextCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(EditEntry.this, new String[]{Manifest.permission.CAMERA}, REQ_CODE_CAMERA);
+
+
+                    } else {
+
+                        startActivityForResult(camera, REQUEST_CODE_CAMERA_ADD_ENTRY);
+                    }
+
+                }
             }
+
         });
+
 
         //for gender
         rb_Female.setOnClickListener(new View.OnClickListener() {
@@ -233,10 +280,7 @@ public class EditEntry extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CAMERA_ADD_ENTRY && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap img = (Bitmap) extras.get("data");
-            pfp.setImageBitmap(img);
-
+            pfp.setImageBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath));
         }
     }
 
@@ -247,6 +291,31 @@ public class EditEntry extends AppCompatActivity {
                 return false;
             }
         return true;
+
+        }
+        private File createImage() throws Exception {
+            File tempPhoto = null;
+
+            if(ContextCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+                //ask permission
+                ActivityCompat.requestPermissions(EditEntry.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                        REQ_CODE_WRITE_READ_PERMISSION );
+
+            }
+            else{
+
+                String timeStamp = new SimpleDateFormat("yyyyMMDD_HHmmss").format(new Date());
+                String fileName = "IMG_" + timeStamp +"_";
+                File fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
+                tempPhoto = File.createTempFile(fileName,".jpg",fileDir);
+                mCurrentPhotoPath = tempPhoto.getAbsolutePath();
+
+
+            }
+            return tempPhoto;
 
         }
 

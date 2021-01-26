@@ -9,6 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Group3Act1">
+        <provider
+            android:authorities="com.group3.group3act1.fileprovider"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+                        android:resource="@xml/file_paths"></meta-data>
+
+        </provider>
         <activity android:name=".EditEntry"></activity>
         <activity android:name=".IndividualEntry" />
         <activity android:name=".AddEntry" />
@@ -22,5 +31,9 @@
             </intent-filter>
         </activity>
     </application>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
 
 </manifest>

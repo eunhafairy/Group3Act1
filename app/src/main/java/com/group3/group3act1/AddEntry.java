@@ -3,20 +3,27 @@ package com.group3.group3act1;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -24,13 +31,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class AddEntry extends AppCompatActivity {
 
 
+    private static final int REQ_CODE_WRITE_READ_PERMISSION = 4;
+    final int REQ_CODE_CAMERA = 12;
     Context c = this;
     //button
     Button submitBtn;
@@ -49,6 +62,9 @@ public class AddEntry extends AppCompatActivity {
     Bitmap img;
     //request code
     final int REQUEST_CODE_CAMERA_ADD_ENTRY = 3;
+
+    String mCurrentPhotoPath;
+    Uri mCurrentPhotoUri;
 
     //string
     String genderHolder;
@@ -108,7 +124,33 @@ public class AddEntry extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(camera, REQUEST_CODE_CAMERA_ADD_ENTRY);
+
+                File tempImage = null;
+                try {
+                    tempImage = createImage();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if(tempImage != null){
+                    Uri uriImage = FileProvider.getUriForFile(c,
+                            "com.group3.group3act1.fileprovider",
+                            tempImage);
+                    mCurrentPhotoUri = uriImage;
+                    camera.putExtra(MediaStore.EXTRA_OUTPUT, uriImage);
+
+                    if(ContextCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                        ActivityCompat.requestPermissions(AddEntry.this, new String[]{Manifest.permission.CAMERA}, REQ_CODE_CAMERA);
+
+
+                    }
+                    else{
+
+                        startActivityForResult(camera, REQUEST_CODE_CAMERA_ADD_ENTRY);
+                    }
+
+
+                }
             }
         });
 
@@ -156,9 +198,8 @@ public class AddEntry extends AppCompatActivity {
 
 
                     Intent data = new Intent();
-                    data.putExtra("Image", "");
-
-
+                    data.putExtra("Image", mCurrentPhotoPath);
+                    Toast.makeText(c, mCurrentPhotoPath, Toast.LENGTH_SHORT).show();
                     data.putExtra("Name", name.getText().toString());
                     data.putExtra("Position", position.getText().toString());
                     data.putExtra("Birthday", birthDate.getText().toString());
@@ -209,13 +250,38 @@ public class AddEntry extends AppCompatActivity {
 
     }
 
+    private File createImage() throws Exception {
+        File tempPhoto = null;
+
+        if(ContextCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED &&
+           ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+            //ask permission
+            ActivityCompat.requestPermissions(AddEntry.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQ_CODE_WRITE_READ_PERMISSION );
+
+        }
+        else{
+
+            String timeStamp = new SimpleDateFormat("yyyyMMDD_HHmmss").format(new Date());
+            String fileName = "IMG_" + timeStamp +"_";
+            File fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
+            tempPhoto = File.createTempFile(fileName,".jpg",fileDir);
+            mCurrentPhotoPath = tempPhoto.getAbsolutePath();
+
+
+        }
+        return tempPhoto;
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CAMERA_ADD_ENTRY && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            img = (Bitmap) extras.get("data");
-            imgView.setImageBitmap(img);
+            imgView.setImageBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath));
+
 
 
         }

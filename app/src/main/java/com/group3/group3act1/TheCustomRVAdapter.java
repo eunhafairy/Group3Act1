@@ -30,6 +30,10 @@ public class TheCustomRVAdapter extends RecyclerView.Adapter<TheCustomRVAdapter.
 
 
 
+    int initial = 0;
+
+
+
 
     public TheCustomRVAdapter(Context c, int layout, ArrayList<Entry> entryList) {
         this.c = c;
@@ -75,11 +79,12 @@ public class TheCustomRVAdapter extends RecyclerView.Adapter<TheCustomRVAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
+
+
         Entry entry = entryList.get(position);
-        Bitmap bitmap = BitmapFactory.decodeFile(entry.getEntryImage());
-        holder.entryImage.setImageBitmap(bitmap);
-        holder.nameText.setText(entry.getEntryName());
-        holder.remarkText.setText(entry.getEntryRemark());
+        holder.entryImage.setImageBitmap(BitmapFactory.decodeFile(entry.getEntryImage())); //sets filepath to imageview
+        holder.nameText.setText(entry.getEntryName()); //sets name
+        holder.remarkText.setText(entry.getEntryRemark()); //sets remark
 
 
     }
