@@ -11,6 +11,7 @@
         android:layout_height="100dp"
         android:layout_width="0dp"
         android:src="@mipmap/ic_launcher"
+        android:layout_margin="1dp"
         android:layout_weight="1"
         ></ImageView>
 

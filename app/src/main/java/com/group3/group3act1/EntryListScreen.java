@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -30,6 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -51,6 +55,7 @@ public class EntryListScreen extends AppCompatActivity {
 
     String mCurrentPhotoPath;
     Uri mCurrentPhotoUri;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,14 +83,86 @@ public class EntryListScreen extends AppCompatActivity {
 
 
          */
+      Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.fkr);
 
+      File mFile1 = Environment.getExternalStorageDirectory();
+      String fileName = "fkr.png";
+      File mFile2 = new File(mFile1, fileName);
+      try{
+          FileOutputStream outputStream;
+          outputStream = new FileOutputStream(mFile2);
+          bitmap1.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+          outputStream.flush();
+          outputStream.close();
 
+      }
+      catch (FileNotFoundException e) {
+
+          e.printStackTrace();;
+      }
+      catch(IOException e){
+
+          e.printStackTrace();
+
+      }
+
+      String sdPathFkr = mFile1.getAbsolutePath().toString()+"/"+fileName;
+
+        Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.huni);
+
+        File mFileHuni = Environment.getExternalStorageDirectory();
+        String fileNameHuni = "huni.png";
+        File mFileHuni2 = new File(mFile1, fileName);
+        try{
+            FileOutputStream outputStream;
+            outputStream = new FileOutputStream(mFileHuni2);
+            bitmap2.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+        }
+        catch (FileNotFoundException e) {
+
+            e.printStackTrace();;
+        }
+        catch(IOException e){
+
+            e.printStackTrace();
+
+        }
+
+        String sdPathHuni = mFileHuni.getAbsolutePath().toString()+"/"+fileNameHuni;
+
+        Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(), R.drawable.fkr);
+
+        File mFileJcky = Environment.getExternalStorageDirectory();
+        String fileNameJcky = "jkcylv.png";
+        File mFileJcky2 = new File(mFileJcky, fileNameJcky);
+        try{
+            FileOutputStream outputStream;
+            outputStream = new FileOutputStream(mFileJcky2);
+            bitmap3.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+        }
+        catch (FileNotFoundException e) {
+
+            e.printStackTrace();;
+        }
+        catch(IOException e){
+
+            e.printStackTrace();
+
+        }
+
+        String sdPathJcky = mFileJcky.getAbsolutePath().toString()+"/"+fileNameJcky;
 
 
 
 
 //Given samples
-        entryList.add(new Entry("res/drawable/fkr.png",
+        entryList.add(new Entry(sdPathFkr,
                 "Faker",
                 "Mid Laner",
                 "02/04/1999",
@@ -102,9 +179,9 @@ public class EntryListScreen extends AppCompatActivity {
 
 
 
-        entryList.add(new Entry("", "Huni", "Top Laner","12/25/1995","M","South Korea",
+        entryList.add(new Entry(sdPathHuni, "Huni", "Top Laner","12/25/1995","M","South Korea",
                 "09XXXXXXXXX","Playing Videogames","other information"));
-        entryList.add(new Entry("", "Jackeylove", "AD Carry","07/23/2000","M","China",
+        entryList.add(new Entry(sdPathJcky, "Jackeylove", "AD Carry","07/23/2000","M","China",
                 "09XXXXXXXXX","Playing Videogames","other information"));
 
 
