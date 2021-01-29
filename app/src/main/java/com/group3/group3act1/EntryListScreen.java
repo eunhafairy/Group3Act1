@@ -83,6 +83,7 @@ public class EntryListScreen extends AppCompatActivity {
 
 
          */
+
       Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.fkr);
 
       File mFile1 = Environment.getExternalStorageDirectory();
@@ -112,11 +113,11 @@ public class EntryListScreen extends AppCompatActivity {
 
         File mFileHuni = Environment.getExternalStorageDirectory();
         String fileNameHuni = "huni.png";
-        File mFileHuni2 = new File(mFile1, fileName);
+        File mFileHuni2 = new File(mFile1, fileNameHuni);
         try{
             FileOutputStream outputStream;
             outputStream = new FileOutputStream(mFileHuni2);
-            bitmap2.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            bitmap2.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
             outputStream.flush();
             outputStream.close();
 
@@ -133,7 +134,7 @@ public class EntryListScreen extends AppCompatActivity {
 
         String sdPathHuni = mFileHuni.getAbsolutePath().toString()+"/"+fileNameHuni;
 
-        Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(), R.drawable.fkr);
+        Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(), R.drawable.jkcylv);
 
         File mFileJcky = Environment.getExternalStorageDirectory();
         String fileNameJcky = "jkcylv.png";

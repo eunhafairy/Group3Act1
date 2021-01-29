@@ -176,15 +176,22 @@
 
 
     </ScrollView>
-    <Button
-        android:id="@+id/editEntry_submitButton"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:backgroundTint="#434343"
-        android:textColor="@color/white"
-        android:textSize="25sp"
-        android:text="Submit"/>
+        android:orientation="vertical"
+        >
+        <Button
+            android:id="@+id/editEntry_submitButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="#434343"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:text="Submit"/>
+    </LinearLayout>
+
 
 
 </LinearLayout>

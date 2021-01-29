@@ -82,6 +82,7 @@ public class TheCustomRVAdapter extends RecyclerView.Adapter<TheCustomRVAdapter.
 
 
         Entry entry = entryList.get(position);
+
         holder.entryImage.setImageBitmap(BitmapFactory.decodeFile(entry.getEntryImage())); //sets filepath to imageview
         holder.nameText.setText(entry.getEntryName()); //sets name
         holder.remarkText.setText(entry.getEntryRemark()); //sets remark

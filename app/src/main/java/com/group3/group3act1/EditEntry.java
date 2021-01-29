@@ -57,11 +57,11 @@ public class EditEntry extends AppCompatActivity {
     //REQUEST CODE
     final int REQUEST_CODE_CAMERA_ADD_ENTRY = 12;
 
-    //Strings
+    //Strings and bool
     String errorMessage = "";
     Uri mCurrentPhotoUri;
     String mCurrentPhotoPath = "";
-
+    boolean flag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,9 +187,17 @@ public class EditEntry extends AppCompatActivity {
                 } else {
 
                     Intent data = new Intent();
-                    if(!mCurrentPhotoPath.equals("")){
-                        data.putExtra("Image", mCurrentPhotoPath);
+                    if (flag == false){
+                    data.putExtra("Image", tempEntry.getEntryImage());
+
                     }
+                    else{
+                        data.putExtra("Image", mCurrentPhotoPath);
+
+                    }
+
+
+
 
                     data.putExtra("Name", name.getText().toString());
                     data.putExtra("Remark", remark.getText().toString());
@@ -213,6 +221,7 @@ public class EditEntry extends AppCompatActivity {
         pfp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                flag = true;
                 Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
                 File tempImage = null;
