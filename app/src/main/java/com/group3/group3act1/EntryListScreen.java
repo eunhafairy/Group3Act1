@@ -83,7 +83,7 @@ public class EntryListScreen extends AppCompatActivity {
 
 
          */
-
+/*
       Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.fkr);
 
       File mFile1 = Environment.getExternalStorageDirectory();
@@ -160,8 +160,9 @@ public class EntryListScreen extends AppCompatActivity {
         String sdPathJcky = mFileJcky.getAbsolutePath().toString()+"/"+fileNameJcky;
 
 
+*/
 
-
+        /*
 //Given samples
         entryList.add(new Entry(sdPathFkr,
                 "Faker",
@@ -184,7 +185,7 @@ public class EntryListScreen extends AppCompatActivity {
                 "09XXXXXXXXX","Playing Videogames","other information"));
         entryList.add(new Entry(sdPathJcky, "Jackeylove", "AD Carry","07/23/2000","M","China",
                 "09XXXXXXXXX","Playing Videogames","other information"));
-
+*/
 
     rv1 = (RecyclerView) findViewById(R.id.rv1);
     rv1.setLayoutManager(new LinearLayoutManager(c));
@@ -312,14 +313,14 @@ public class EntryListScreen extends AppCompatActivity {
             Entry newEntry = new Entry(_image,_name,_remark,_bday,_gender,_address,_contact,_hobbies,_otherInfo);
 
 
-                    Toast.makeText(c,"SuccessfulH",Toast.LENGTH_LONG).show();
+                    Toast.makeText(c,"Successful!",Toast.LENGTH_LONG).show();
                     entryList.add(newEntry);
                     theCustomRVAdapter.notifyDataSetChanged();
 
 
                 }
         else if (requestCode == REQUEST_CODE_FOR_EDIT && resultCode == RESULT_OK){
-                Toast.makeText(c, "Edit successful", Toast.LENGTH_LONG).show();
+                Toast.makeText(c, "Edit successful!", Toast.LENGTH_LONG).show();
                 Bundle extras = data.getExtras();
                 String _imageEdit = extras.getString("Image");
                 String _nameEdit = extras.getString("Name");

@@ -199,7 +199,6 @@ public class AddEntry extends AppCompatActivity {
 
                     Intent data = new Intent();
                     data.putExtra("Image", mCurrentPhotoPath);
-                    Toast.makeText(c, mCurrentPhotoPath, Toast.LENGTH_SHORT).show();
                     data.putExtra("Name", name.getText().toString());
                     data.putExtra("Position", position.getText().toString());
                     data.putExtra("Birthday", birthDate.getText().toString());

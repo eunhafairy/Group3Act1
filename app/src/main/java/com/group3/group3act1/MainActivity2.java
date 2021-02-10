@@ -3,14 +3,24 @@ package com.group3.group3act1;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.media.MediaActionSound;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.JsonReader;
 import android.view.View;
@@ -28,20 +38,28 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class MainActivity2 extends AppCompatActivity {
 
+
+    //database
+    SQLDBHelper db;
 
     //request code
     final int REQUEST_CODE_CAMERA = 2;
     //arrays
 
     String errorMessage="", registrationMessage = "", gender ="", hobbies = "";
-
+    String imagePath="";
     String _brgys[] = {"Sta. Barbara", "Tarcan", "Makinabang", "Concepcion", "Poblacion", "Pinagbarilan", "Matang Tubig","Barangay 143","Tumana","San Jose"};
     String _municipalities[] = {"Baliwag", "Plaridel", "Pulilan", "Sta. Maria", "Bustos", "San Rafael", "San Ildefonso","Cainta","Kawit","Meycauayan"};
     String _province[] = {"Bulacan", "Pampanga", "Nueva Ecija", "Tarlac", "Aurora", "Ilocos Sur", "Ilocos Norte","Metro Manila","Quezon City","Davao"};
     String securityQuestions[] = {"---","What is the first name of your mother?", "What is the name of your first dog?", "What is the name of your elementary school?", "What is your bestfriend's name?", "What is your favourite colour?", };
-
+    String _CurrentPhotoPath;
+    Uri _CurrentPhotoUri;
     //datepicker
     DatePickerDialog datePickerDialog;
 
@@ -70,6 +88,8 @@ public class MainActivity2 extends AppCompatActivity {
     //checkboxes
     CheckBox cBox_dance, cBox_sing,cBox_games,cBox_sports,cBox_draw,cBox_paint,cBox_cook,cBox_study,cBox_design,cBox_code;
 
+    //permission
+    final int REQ_CODE_WRITE_READ_PERMISSION = 1010;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +112,9 @@ public class MainActivity2 extends AppCompatActivity {
         rb_female = (RadioButton) findViewById(R.id.rb_f);
         rb_male = (RadioButton) findViewById(R.id.rb_m);
         rb_others = (RadioButton) findViewById(R.id.rb_o);
+
+        //database
+        db = new SQLDBHelper(c);
 
         //edit texts
         eTxt_un = (EditText) findViewById(R.id.eText_uname);
@@ -341,6 +364,17 @@ public class MainActivity2 extends AppCompatActivity {
                         gender=other_eTxt.getText().toString();
                     }
 
+                    //INSERT INTO DATABASE
+                    if(db.insertIntoUserTable(eTxt_firstname.getText().toString(),eTxt_un.getText().toString(),
+                            eTxt_pw.getText().toString(),editText_bday.getText().toString(),
+                            house.getText().toString()+" "+street.getText().toString()+", "+brgy.getText().toString()+", "+municipality.getText().toString()+", "
+                                    +province.getText().toString(),gender,hobbies,eTxtnum.getText().toString(),spnr1_eText.getText().toString(),spnr2_eText.toString(),spnr2_eText.getText().toString(),
+                            _CurrentPhotoPath)){
+
+
+                    }
+
+
 
             Toast.makeText(c,"Registration Successful",Toast.LENGTH_LONG).show();
                     registrationMessage = "Username: "+eTxt_un.getText().toString()+"\nFullname: "+eTxt_firstname.getText().toString()+" "+eTxt_mname.getText().toString()+" "
@@ -349,6 +383,10 @@ public class MainActivity2 extends AppCompatActivity {
                                            +province.getText().toString()+"\nContact Number: "+eTxtnum.getText().toString()+"\nHobbies: "+hobbies+"\n--Security Questions--\n"+"1. "+spnr1.getSelectedItem().toString()+
                                            "\nAnswer: "+spnr1_eText.getText().toString()+"\n2. "+spnr2.getSelectedItem().toString()+"\nAnswer: "+spnr2_eText.getText().toString()+
                                            "\n3. "+spnr3.getSelectedItem().toString()+"\nAnswer: "+spnr3_eText.getText().toString();
+
+
+
+
                     builder.setTitle("Successful")
                             .setMessage(registrationMessage)
                             .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
@@ -394,8 +432,36 @@ public class MainActivity2 extends AppCompatActivity {
        imgpfp.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+
                Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-               startActivityForResult(camera, REQUEST_CODE_CAMERA);
+                File tempImage = null;
+               try {
+                   tempImage = createImage();
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
+               if(tempImage != null) {
+                   Uri uriImage = FileProvider.getUriForFile(c,
+                           "com.group3.group3act1.fileprovider",
+                           tempImage);
+                   _CurrentPhotoUri = uriImage;
+                   camera.putExtra(MediaStore.EXTRA_OUTPUT, uriImage);
+
+
+                   if(ContextCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                       ActivityCompat.requestPermissions(MainActivity2.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
+
+
+                   }
+                   else{
+
+                       startActivityForResult(camera, REQUEST_CODE_CAMERA);
+                   }
+
+               }
+
+
+
 
            }
        });
@@ -576,9 +642,38 @@ public class MainActivity2 extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK){
-            Bundle extras = data.getExtras();
-            Bitmap img =(Bitmap) extras.get("data");
-            imgpfp.setImageBitmap(img);
+          imgpfp.setImageBitmap(BitmapFactory.decodeFile(_CurrentPhotoPath));
+
         }
     }
+
+
+
+
+    private File createImage() throws Exception {
+        File tempPhoto = null;
+
+        if(ContextCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+            //ask permission
+            ActivityCompat.requestPermissions(MainActivity2.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQ_CODE_WRITE_READ_PERMISSION );
+
+        }
+        else{
+
+            String timeStamp = new SimpleDateFormat("yyyyMMDD_HHmmss").format(new Date());
+            String fileName = "IMG_" + timeStamp +"_";
+            File fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
+            tempPhoto = File.createTempFile(fileName,".jpg",fileDir);
+            _CurrentPhotoPath = tempPhoto.getAbsolutePath();
+
+
+        }
+        return tempPhoto;
+
+    }
+
 }

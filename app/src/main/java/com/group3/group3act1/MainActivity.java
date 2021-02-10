@@ -3,10 +3,15 @@ package com.group3.group3act1;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,11 +22,13 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQ_CODE_WRITE_READ_PERMISSION = 3;
     final int REQUEST_CODE_FOR_REGISTRATION = 143;
     ArrayList<Account> accountList = new ArrayList<>();
     EditText eTxt_username, eTxt_password;
     Button bt_Login, bt_Reg;
     Context c = this;
+    SQLDBHelper myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         bt_Login.setOnClickListener(bt_click);
         bt_Reg.setOnClickListener(bt_click);
+        myDb = new SQLDBHelper(c);
 
     }
 
@@ -94,12 +102,22 @@ public class MainActivity extends AppCompatActivity {
                 for(int i = 0; i < accountList.size(); i++){
 
                     if(eTxt_username.getText().toString().equals(accountList.get(i).getUsername()) && eTxt_password.getText().toString().equals(accountList.get(i).getPassword())){
+                        if(ContextCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED &&
+                                ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+                            //ask permission
+                            ActivityCompat.requestPermissions(MainActivity.this,
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                                    REQ_CODE_WRITE_READ_PERMISSION );
 
-                        Toast.makeText(MainActivity.this, "login successful", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(c, EntryListScreen.class);
-                        intent.putExtra("Name", accountList.get(i).getName());
-                        startActivity(intent);
-                        return;
+                        }
+                        else{
+                            Toast.makeText(MainActivity.this, "login successful", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(c, EntryListScreen.class);
+                            intent.putExtra("Name", accountList.get(i).getName());
+                            startActivity(intent);
+                            return;
+                        }
+
 
                     }
                     else if(i == (accountList.size()-1)){
@@ -130,7 +148,21 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent i = new Intent(c, MainActivity2.class);
-                                startActivityForResult(i,REQUEST_CODE_FOR_REGISTRATION);
+                                if(ContextCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED &&
+                                        ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+                                    //ask permission
+                                    ActivityCompat.requestPermissions(MainActivity.this,
+                                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                                            REQ_CODE_WRITE_READ_PERMISSION );
+
+                                }
+                                else{
+
+                                    startActivityForResult(i,REQUEST_CODE_FOR_REGISTRATION);
+                                }
+
+
+
                             }
                         })
                         .setMessage("Going to registration page");
