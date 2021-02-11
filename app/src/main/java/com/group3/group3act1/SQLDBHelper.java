@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 public class SQLDBHelper extends SQLiteOpenHelper {
 
     private static String DATABASE_NAME = "myDatabase.db";
-    private static int VERSION = 6;
+    private static int VERSION = 7;
     Context context;
     public SQLDBHelper( Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -41,7 +41,7 @@ public class SQLDBHelper extends SQLiteOpenHelper {
                 "'"+DB_Contract.tb_Account.ACCOUNT_SECURITY_3+"' TEXT NOT NULL," +
                 "'"+DB_Contract.tb_Account.ACCOUNT_IMAGE_PATH+"' TEXT," +
                 "UNIQUE ('"+DB_Contract.tb_Account.ACCOUNT_ID+"') ON CONFLICT ABORT);";
-        Toast.makeText(context, CREATE_USER_TABLE, Toast.LENGTH_SHORT).show();
+
 
 
         final String CREATE_ENTRY_TABLE = "CREATE TABLE '"+DB_Contract.tb_Entry.ENTRY_TABLE+"' (" +

@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
+
+
 
         /*
         accountList.add(new Account("Anna", "13579abcdeA", "Anna Lisa"));
@@ -226,6 +229,10 @@ public class MainActivity extends AppCompatActivity {
              }
 
             else if (v.getId() == R.id.registerBtn) {
+
+
+
+
                 builder.setTitle("Alert")
                         .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                             @Override
