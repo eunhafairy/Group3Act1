@@ -197,6 +197,7 @@ public class AddEntry extends AppCompatActivity {
                 } else {
 
 
+
                     Intent data = new Intent();
                     data.putExtra("Image", mCurrentPhotoPath);
                     data.putExtra("Name", name.getText().toString());

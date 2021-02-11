@@ -106,7 +106,7 @@ public class SQLDBHelper extends SQLiteOpenHelper {
     }
 
 
-//unedited
+
 
     public boolean insertIntoEntryTable(int account_id,
                                         String entry_name,
@@ -148,12 +148,68 @@ public class SQLDBHelper extends SQLiteOpenHelper {
 
     }
 
+    public boolean updateIntoEntryTable(String entry_id,
+                                        String entry_name,
+                                        String entry_remark,
+                                        String entry_bday,
+                                        String entry_gender,
+                                        String entry_contact,
+                                        String entry_hobbies,
+                                        String entry_other,
+                                        String entry_image,
+                                        String entry_address){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+
+        values.put(DB_Contract.tb_Entry.ENTRY_NAME, entry_name);
+        values.put(DB_Contract.tb_Entry.ENTRY_REMARK, entry_remark);
+        values.put(DB_Contract.tb_Entry.ENTRY_BIRTHDAY, entry_bday);
+        values.put(DB_Contract.tb_Entry.ENTRY_GENDER, entry_gender);
+        values.put(DB_Contract.tb_Entry.ENTRY_CONTACT, entry_contact);
+        values.put(DB_Contract.tb_Entry.ENTRY_HOBBIES, entry_hobbies);
+        values.put(DB_Contract.tb_Entry.ENTRY_OTHERINFORMATION, entry_other);
+        values.put(DB_Contract.tb_Entry.ENTRY_IMAGE, entry_image);
+        values.put(DB_Contract.tb_Entry.ENTRY_ADDRESS, entry_address);
+
+
+        String selection = DB_Contract.tb_Entry.ENTRY_ID + " = ?";
+        String[] selectionArgs = {entry_id};
+        int affected = db.update(DB_Contract.tb_Entry.ENTRY_TABLE, values, selection, selectionArgs);
+        if(affected>0){
+            return true;
+
+        }
+        else{
+            return false;
+
+        }
+
+
+
+
+    }
+
+
+
+
     public Cursor selectAllEntry(){
         SQLiteDatabase db = getReadableDatabase();
         Cursor result = db.query(DB_Contract.tb_Entry.ENTRY_TABLE, null, null, null, null, null,null);
         return result;
 
     }
+
+    public Cursor selectAllEntryOrdered(){
+        SQLiteDatabase db = getReadableDatabase();
+        String orderBy = DB_Contract.tb_Entry.ACCOUNT_ID + " ASC ";
+        Cursor result = db.query(DB_Contract.tb_Entry.ENTRY_TABLE, null, null, null, null, null,orderBy);
+        return result;
+
+    }
+
     public Cursor selectAllUsers(){
         SQLiteDatabase db = getReadableDatabase();
         Cursor result = db.query(DB_Contract.tb_Account.ACCOUNT_TABLE, null, null, null, null, null,null);
@@ -161,30 +217,57 @@ public class SQLDBHelper extends SQLiteOpenHelper {
 
     }
 
+    public boolean deleteEntry(String ID){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String selection = DB_Contract.tb_Entry.ENTRY_ID + " = ? ";
+        String [] selectionArgs = {ID};
+        int affected = db.delete(DB_Contract.tb_Entry.ENTRY_TABLE,selection, selectionArgs );
+        if(affected > 0){
+            return true;
+
+        }
+        else{
+
+            return false;
+        }
+    }
+
 
     public Cursor selectEntryByID(String accountID){
         SQLiteDatabase db = getReadableDatabase();
 
+        String selection =  DB_Contract.tb_Entry.ACCOUNT_ID+" = ? ";
 
-        String[] columns = {
-                DB_Contract.tb_Entry.ENTRY_NAME,DB_Contract.tb_Entry.ENTRY_REMARK, DB_Contract.tb_Entry.ENTRY_IMAGE
-        };
-        String selection =  DB_Contract.tb_Entry.ACCOUNT_ID+" = ?";
         String[] selectionArgs = {accountID};
-        String orderBy = DB_Contract.tb_Entry.ENTRY_TABLE+" DESC";
-
-
-
         Cursor result = db.query(DB_Contract.tb_Entry.ENTRY_TABLE,
-                columns,
+                null,
                 selection,
                 selectionArgs,
                 null,
                 null,
-                orderBy);
+                null);
         return result;
 
     }
+
+    public Cursor selectEntryByName(String accountName){
+        SQLiteDatabase db = getReadableDatabase();
+
+        String selection =  DB_Contract.tb_Entry.ENTRY_NAME+" LIKE ? ";
+
+        String[] selectionArgs = {"%"+accountName+"%"};
+        Cursor result = db.query(DB_Contract.tb_Entry.ENTRY_TABLE,
+                null,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null);
+        return result;
+
+    }
+
 
 
 

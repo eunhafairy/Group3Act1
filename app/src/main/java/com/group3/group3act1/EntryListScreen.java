@@ -57,7 +57,7 @@ public class EntryListScreen extends AppCompatActivity {
     String mCurrentPhotoPath;
     Uri mCurrentPhotoUri;
     SQLDBHelper sqldbHelper;
-
+    String sdPathDefault;
     int account_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +87,8 @@ public class EntryListScreen extends AppCompatActivity {
                     result.getString(6), //CONTACT
                     result.getString(7),//HOBBIES
                     result.getString(8), //OTHER INFO
-                    result.getInt(1) )); //ACOUNT ID
+                    result.getInt(1),
+                    result.getInt(0))); //ACOUNT ID
 
             }
 
@@ -108,7 +109,8 @@ public class EntryListScreen extends AppCompatActivity {
          //get intent
         Intent i = getIntent();
         String name = i.getStringExtra("Name");
-        account_id = i.getIntExtra("accountID",0);
+        account_id = i.getIntExtra("accountID", 0);
+
         entryList_title = (TextView) findViewById(R.id.entryList_titleView);
         entryList_title.setText(name);
 
@@ -119,10 +121,10 @@ public class EntryListScreen extends AppCompatActivity {
 
          */
 
-      Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.fkr);
+      Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.defaultuser);
 
       File mFile1 = Environment.getExternalStorageDirectory();
-      String fileName = "fkr.png";
+      String fileName = "default.png";
       File mFile2 = new File(mFile1, fileName);
       try{
           FileOutputStream outputStream;
@@ -142,7 +144,7 @@ public class EntryListScreen extends AppCompatActivity {
 
       }
 
-      String sdPathFkr = mFile1.getAbsolutePath().toString()+"/"+fileName;
+     sdPathDefault = mFile1.getAbsolutePath()+"/"+fileName;
 
       /*
         Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.huni);
@@ -200,6 +202,7 @@ public class EntryListScreen extends AppCompatActivity {
 
 
 //Given samples
+        /*
         entryList.add(new Entry(sdPathFkr,
                 "Faker",
                 "Mid Laner",
@@ -209,8 +212,8 @@ public class EntryListScreen extends AppCompatActivity {
                 "09XXXXXXXXX",
                 "Playing Videogames",
                 "other information",
-                account_id));
-
+                Integer.valueOf(account_id)));
+*/
 
 
 /*
@@ -223,7 +226,40 @@ public class EntryListScreen extends AppCompatActivity {
         entryList.add(new Entry(sdPathJcky, "Jackeylove", "AD Carry","07/23/2000","M","China",
                 "09XXXXXXXXX","Playing Videogames","other information"));
 */
+        String accountID = String.valueOf(account_id);
+        Cursor result = sqldbHelper.selectEntryByID(accountID);
 
+            if (result.getCount() == 0) {
+                Toast.makeText(c, "No entries", Toast.LENGTH_SHORT).show();
+
+            } else {
+
+                while (result.moveToNext()) {
+                    String image;
+                    if(result.getString(9) == null){
+                        image = sdPathDefault;
+                    }
+                    else{
+                        image = result.getString(9);
+
+                    }
+
+                    entryList.add(new Entry(image, // IMAGE
+                                result.getString(2), //NAME
+                                result.getString(3), //REMARK
+                                result.getString(4), //BDAY
+                                result.getString(5), //GENDER
+                                result.getString(10), //ADDRESS
+                                result.getString(6), //CONTACT
+                                result.getString(7),//HOBBIES
+                                result.getString(8), //OTHER INFO
+                                result.getInt(1),//accounbt id
+                            result.getInt(0))); //entry ID
+
+                }
+
+
+        }
 
     rv1 = (RecyclerView) findViewById(R.id.rv1);
     rv1.setLayoutManager(new LinearLayoutManager(c));
@@ -263,7 +299,10 @@ public class EntryListScreen extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 entryList.clear();
+                                Intent i = new Intent(c,MainActivity.class);
+                                startActivity(i);
                                 finish();
+
                             }
                         });
                 AlertDialog alertDialog = builder.create();
@@ -299,9 +338,14 @@ public class EntryListScreen extends AppCompatActivity {
                 }).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(c,"Successfully deleted: "+entryList.get(position).getEntryName(), Toast.LENGTH_LONG).show();
-                        entryList.remove(position);
-                        theCustomRVAdapter.notifyItemRemoved(position);
+
+                         if(sqldbHelper.deleteEntry(String.valueOf(entryList.get(position).getEntryID()))){
+                             Toast.makeText(c,"Successfully deleted: "+entryList.get(position).getEntryName(), Toast.LENGTH_LONG).show();
+                             entryList.remove(position);
+                             theCustomRVAdapter.notifyItemRemoved(position);
+
+                         }
+
                     }
                 }).setCancelable(true);
                 AlertDialog alertDialog = builder.create();
@@ -340,6 +384,10 @@ public class EntryListScreen extends AppCompatActivity {
 
 
             String _image = data.getStringExtra("Image");
+            if (_image == null){
+
+                _image = sdPathDefault;
+            }
             String _name = data.getStringExtra("Name");
             String _remark = data.getStringExtra("Position");
             String _bday = data.getStringExtra("Birthday");
@@ -350,26 +398,42 @@ public class EntryListScreen extends AppCompatActivity {
             String _otherInfo = data.getStringExtra("Other");
 
 
-           Entry newEntry = new Entry(_image,_name,_remark,_bday,_gender,_address,_contact,_hobbies,_otherInfo, account_id);
+            if(sqldbHelper.insertIntoEntryTable(account_id,
+                    _name,
+                    _remark,
+                    _bday,
+                    _gender,
+                    _contact,
+                    _hobbies,
+                    _otherInfo,
+                    _image,
+                    _address)){
 
-           if(sqldbHelper.insertIntoEntryTable(account_id,
-                   _name,
-                   _remark,
-                   _bday,
-                   _gender,
-                   _contact,
-                   _hobbies,
-                   _otherInfo,
-                   _image,
-                   _address)){
+                Toast.makeText(c,"Successful!",Toast.LENGTH_LONG).show();
 
-               Toast.makeText(c,"Successful!",Toast.LENGTH_LONG).show();
-               entryList.add(newEntry);
-               theCustomRVAdapter.notifyDataSetChanged();
+                Cursor entry = sqldbHelper.selectAllEntryOrdered();
+                if(entry.getCount() == 0){
+                    Toast.makeText(c, "No data", Toast.LENGTH_SHORT).show();
+
+                }
+                else{
+
+                    entry.moveToLast();
+                    Entry newEntry = new Entry(_image,_name,_remark,_bday,_gender,_address,_contact,_hobbies,_otherInfo, account_id, entry.getInt(0));
+                    entryList.add(newEntry);
+                    theCustomRVAdapter.notifyDataSetChanged();
+
+                }
 
 
 
-           }
+
+
+
+            }
+
+
+
 
 
 
@@ -378,7 +442,8 @@ public class EntryListScreen extends AppCompatActivity {
                 }
 
         else if (requestCode == REQUEST_CODE_FOR_EDIT && resultCode == RESULT_OK){
-                Toast.makeText(c, "Edit successful!", Toast.LENGTH_LONG).show();
+
+
                 Bundle extras = data.getExtras();
                 String _imageEdit = extras.getString("Image");
                 String _nameEdit = extras.getString("Name");
@@ -390,17 +455,27 @@ public class EntryListScreen extends AppCompatActivity {
                 String _hobbiessEdit = extras.getString("Hobbies");
                 String _otherEdit = extras.getString("Other");
                 int position = extras.getInt("Position");
-                entryList.get(position).setEntryImage(_imageEdit);
-                entryList.get(position).setEntryName(_nameEdit);
-                entryList.get(position).setEntryRemark(_remarkEdt);
-                entryList.get(position).setBirthdate(_birthdateEdit);
-                entryList.get(position).setEntryGender(_genderEdit);
-                entryList.get(position).setEntryAddress(_addressEdit);
-                entryList.get(position).setEntryContact(_contactEdit);
-                entryList.get(position).setEntryHobbies(_hobbiessEdit);
-                entryList.get(position).setOtherInformation(_otherEdit);
 
-                theCustomRVAdapter.notifyDataSetChanged();
+
+                if(sqldbHelper.updateIntoEntryTable(String.valueOf(entryList.get(position).getEntryID()), _nameEdit,_remarkEdt,_birthdateEdit,_genderEdit,_contactEdit,_hobbiessEdit,_otherEdit,_imageEdit,_addressEdit)){
+                    entryList.get(position).setEntryImage(_imageEdit);
+                    entryList.get(position).setEntryName(_nameEdit);
+                    entryList.get(position).setEntryRemark(_remarkEdt);
+                    entryList.get(position).setBirthdate(_birthdateEdit);
+                    entryList.get(position).setEntryGender(_genderEdit);
+                    entryList.get(position).setEntryAddress(_addressEdit);
+                    entryList.get(position).setEntryContact(_contactEdit);
+                    entryList.get(position).setEntryHobbies(_hobbiessEdit);
+                    entryList.get(position).setOtherInformation(_otherEdit);
+                    Toast.makeText(c, "Edit successful!", Toast.LENGTH_LONG).show();
+                    theCustomRVAdapter.notifyDataSetChanged();
+
+
+                }
+
+
+
+
 
         }
 

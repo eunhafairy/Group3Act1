@@ -5,19 +5,19 @@ import android.os.Parcelable;
 
 public class Entry implements Parcelable {
 
-
     private String entryImage;
     private String entryName;
-   private String entryRemark;
+    private String entryRemark;
     private String birthdate;
-   private String entryGender;
+    private String entryGender;
     private String entryAddress;
-     private String entryContact;
+    private String entryContact;
     private String entryHobbies;
     private String otherInformation;
     private int accountID;
+    private int entryID;
 
-    public Entry(String entryImage, String entryName, String entryRemark, String birthdate, String entryGender, String entryAddress, String entryContact, String entryHobbies, String otherInformation, int accountID) {
+    public Entry(String entryImage, String entryName, String entryRemark, String birthdate, String entryGender, String entryAddress, String entryContact, String entryHobbies, String otherInformation, int accountID, int entryID) {
         this.setEntryImage(entryImage);
         this.setEntryName(entryName);
         this.setEntryRemark(entryRemark);
@@ -28,7 +28,9 @@ public class Entry implements Parcelable {
         this.setEntryHobbies(entryHobbies);
         this.setOtherInformation(otherInformation);
         this.setAccountID(accountID);
+        this.setEntryID(entryID);
     }
+
 
     protected Entry(Parcel in) {
         entryImage = in.readString();
@@ -41,6 +43,7 @@ public class Entry implements Parcelable {
         entryHobbies = in.readString();
         otherInformation = in.readString();
         accountID = in.readInt();
+        entryID = in.readInt();
     }
 
     public static final Creator<Entry> CREATOR = new Creator<Entry>() {
@@ -135,6 +138,14 @@ public class Entry implements Parcelable {
         this.accountID = accountID;
     }
 
+    public int getEntryID() {
+        return entryID;
+    }
+
+    public void setEntryID(int entryID) {
+        this.entryID = entryID;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -152,5 +163,6 @@ public class Entry implements Parcelable {
         dest.writeString(entryHobbies);
         dest.writeString(otherInformation);
         dest.writeInt(accountID);
+        dest.writeInt(entryID);
     }
 }

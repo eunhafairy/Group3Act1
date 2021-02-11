@@ -187,12 +187,16 @@ public class MainActivity extends AppCompatActivity {
 
                           }
                           else{
+
+
                               Toast.makeText(MainActivity.this, "login successful", Toast.LENGTH_SHORT).show();
                               Intent intent = new Intent(c, EntryListScreen.class);
+                              intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                               intent.putExtra("Name", result.getString(1));
-                              intent.putExtra("accountID", result.getString(0));
+                              intent.putExtra("accountID", result.getInt(0));
                               startActivity(intent);
-                              return;
+                              finish();
+
                           }
 
 

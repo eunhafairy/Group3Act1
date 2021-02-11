@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -63,6 +64,8 @@ public class EditEntry extends AppCompatActivity {
     String mCurrentPhotoPath = "";
     boolean flag = false;
 
+    //SQL
+    SQLDBHelper db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +93,8 @@ public class EditEntry extends AppCompatActivity {
         hobby = (EditText) findViewById(R.id.editEntry_hobbyEdit);
         otherinfo = (EditText) findViewById(R.id.editEntry_otherInfoEdit);
 
+        //sql
+        db = new SQLDBHelper(c);
         //set edit tex to the selected entry's value
         pfp.setImageBitmap(BitmapFactory.decodeFile(tempEntry.getEntryImage()));
         name.setText(tempEntry.getEntryName());
@@ -210,6 +215,10 @@ public class EditEntry extends AppCompatActivity {
                     data.putExtra("Position", position);
 
                     errorMessage = "";
+
+
+                    //db.updateIntoEntryTable()
+
                     setResult(RESULT_OK, data);
                     finish();
 
