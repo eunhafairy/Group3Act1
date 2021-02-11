@@ -365,48 +365,56 @@ public class MainActivity2 extends AppCompatActivity {
                     }
 
                     //INSERT INTO DATABASE
-                    if(db.insertIntoUserTable(eTxt_firstname.getText().toString(),eTxt_un.getText().toString(),
-                            eTxt_pw.getText().toString(),editText_bday.getText().toString(),
+                    if(db.insertIntoUserTable(eTxt_firstname.getText().toString(),
+                            eTxt_un.getText().toString(),
+                            eTxt_pw.getText().toString(),
+                            editText_bday.getText().toString(),
                             house.getText().toString()+" "+street.getText().toString()+", "+brgy.getText().toString()+", "+municipality.getText().toString()+", "
-                                    +province.getText().toString(),gender,hobbies,eTxtnum.getText().toString(),spnr1_eText.getText().toString(),spnr2_eText.toString(),spnr2_eText.getText().toString(),
+                                    +province.getText().toString(),
+                            gender,
+                            hobbies,
+                            eTxtnum.getText().toString(),
+                            spnr1_eText.getText().toString(),
+                            spnr2_eText.getText().toString(),
+                            spnr3_eText.getText().toString(),
                             _CurrentPhotoPath)){
+
+                        Toast.makeText(c,"Registration Successful",Toast.LENGTH_LONG).show();
+                        registrationMessage = "Username: "+eTxt_un.getText().toString()+"\nFullname: "+eTxt_firstname.getText().toString()+" "+eTxt_mname.getText().toString()+" "
+                                +eTxt_lname.getText().toString()+"\nBirthdate: "+editText_bday.getText().toString()+"\nGender: "+gender+"\nComplete Address: "
+                                +house.getText().toString()+" "+street.getText().toString()+", "+brgy.getText().toString()+", "+municipality.getText().toString()+", "
+                                +province.getText().toString()+"\nContact Number: "+eTxtnum.getText().toString()+"\nHobbies: "+hobbies+"\n--Security Questions--\n"+"1. "+spnr1.getSelectedItem().toString()+
+                                "\nAnswer: "+spnr1_eText.getText().toString()+"\n2. "+spnr2.getSelectedItem().toString()+"\nAnswer: "+spnr2_eText.getText().toString()+
+                                "\n3. "+spnr3.getSelectedItem().toString()+"\nAnswer: "+spnr3_eText.getText().toString();
+
+
+
+
+                        builder.setTitle("Successful")
+                                .setMessage(registrationMessage)
+                                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        Intent data = new Intent();
+                                        errorMessage = "";
+                                        setResult(RESULT_OK, data);
+                                        finish();
+
+                                    }
+                                })
+                                .setCancelable(true);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                        errorMessage = "";
+
 
 
                     }
 
 
 
-            Toast.makeText(c,"Registration Successful",Toast.LENGTH_LONG).show();
-                    registrationMessage = "Username: "+eTxt_un.getText().toString()+"\nFullname: "+eTxt_firstname.getText().toString()+" "+eTxt_mname.getText().toString()+" "
-                                           +eTxt_lname.getText().toString()+"\nBirthdate: "+editText_bday.getText().toString()+"\nGender: "+gender+"\nComplete Address: "
-                                           +house.getText().toString()+" "+street.getText().toString()+", "+brgy.getText().toString()+", "+municipality.getText().toString()+", "
-                                           +province.getText().toString()+"\nContact Number: "+eTxtnum.getText().toString()+"\nHobbies: "+hobbies+"\n--Security Questions--\n"+"1. "+spnr1.getSelectedItem().toString()+
-                                           "\nAnswer: "+spnr1_eText.getText().toString()+"\n2. "+spnr2.getSelectedItem().toString()+"\nAnswer: "+spnr2_eText.getText().toString()+
-                                           "\n3. "+spnr3.getSelectedItem().toString()+"\nAnswer: "+spnr3_eText.getText().toString();
 
-
-
-
-                    builder.setTitle("Successful")
-                            .setMessage(registrationMessage)
-                            .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                    Intent data = new Intent();
-                                    data.putExtra("Username", eTxt_un.getText().toString());
-                                    data.putExtra("Password", eTxt_pw.getText().toString());
-                                    data.putExtra("Name", eTxt_firstname.getText().toString());
-                                    errorMessage = "";
-                                    setResult(RESULT_OK, data);
-                                    finish();
-
-                                }
-                            })
-                            .setCancelable(true);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                    errorMessage = "";
 
 
                 }

@@ -25,11 +25,6 @@ public class DB_Contract {
 
 
 
-
-
-
-
-
     }
 
     public static class tb_Entry implements BaseColumns{
@@ -48,6 +43,8 @@ public class DB_Contract {
         public static String ENTRY_HOBBIES = "entry_hobbies";
         public static String ENTRY_OTHERINFORMATION= "entry_other";
         public static String ENTRY_BIRTHDAY = "entry_bday";
+        public static String ENTRY_IMAGE = "entry_image";
+        public static String ENTRY_ADDRESS = "entry_address";
 
 
 

@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -55,8 +56,9 @@ public class EntryListScreen extends AppCompatActivity {
 
     String mCurrentPhotoPath;
     Uri mCurrentPhotoUri;
-    
+    SQLDBHelper sqldbHelper;
 
+    int account_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,16 +66,49 @@ public class EntryListScreen extends AppCompatActivity {
 
         init();
         reg();
+       // selectAndDisplayEntry();
     }
+
+    private void selectAndDisplayEntry() {
+        Cursor result =  sqldbHelper.selectAllEntry();
+        if(result.getCount() == 0){
+            Toast.makeText(c, "No entries", Toast.LENGTH_SHORT).show();
+
+        }
+        else{
+
+            while(result.moveToNext()){
+            entryList.add(new Entry(result.getString(9), // IMAGE
+                    result.getString(2), //NAME
+                    result.getString(3), //REMARK
+                    result.getString(4), //BDAY
+                    result.getString(5), //GENDER
+                    result.getString(10), //ADDRESS
+                    result.getString(6), //CONTACT
+                    result.getString(7),//HOBBIES
+                    result.getString(8), //OTHER INFO
+                    result.getInt(1) )); //ACOUNT ID
+
+            }
+
+
+        }
+
+    }
+
     private void init(){
 
+        sqldbHelper = new SQLDBHelper(c);
         //init imgview/button from inflater
         edtBtn = (ImageView) findViewById(R.id.sr_imgEdit);
         delBtn = (ImageView) findViewById(R.id.sr_imgDelete);
         logoff = (ImageView) findViewById(R.id.logoutImgview);
+
+
          //get intent
         Intent i = getIntent();
         String name = i.getStringExtra("Name");
+        account_id = i.getIntExtra("accountID",0);
         entryList_title = (TextView) findViewById(R.id.entryList_titleView);
         entryList_title.setText(name);
 
@@ -83,7 +118,7 @@ public class EntryListScreen extends AppCompatActivity {
 
 
          */
-/*
+
       Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.fkr);
 
       File mFile1 = Environment.getExternalStorageDirectory();
@@ -109,6 +144,7 @@ public class EntryListScreen extends AppCompatActivity {
 
       String sdPathFkr = mFile1.getAbsolutePath().toString()+"/"+fileName;
 
+      /*
         Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.huni);
 
         File mFileHuni = Environment.getExternalStorageDirectory();
@@ -162,7 +198,7 @@ public class EntryListScreen extends AppCompatActivity {
 
 */
 
-        /*
+
 //Given samples
         entryList.add(new Entry(sdPathFkr,
                 "Faker",
@@ -172,11 +208,12 @@ public class EntryListScreen extends AppCompatActivity {
                 "South Korea",
                 "09XXXXXXXXX",
                 "Playing Videogames",
-                "other information"));
+                "other information",
+                account_id));
 
 
 
-
+/*
 
 
 
@@ -186,6 +223,7 @@ public class EntryListScreen extends AppCompatActivity {
         entryList.add(new Entry(sdPathJcky, "Jackeylove", "AD Carry","07/23/2000","M","China",
                 "09XXXXXXXXX","Playing Videogames","other information"));
 */
+
 
     rv1 = (RecyclerView) findViewById(R.id.rv1);
     rv1.setLayoutManager(new LinearLayoutManager(c));
@@ -224,6 +262,7 @@ public class EntryListScreen extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                entryList.clear();
                                 finish();
                             }
                         });
@@ -299,6 +338,7 @@ public class EntryListScreen extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_CODE && resultCode == RESULT_OK){
 
+
             String _image = data.getStringExtra("Image");
             String _name = data.getStringExtra("Name");
             String _remark = data.getStringExtra("Position");
@@ -310,15 +350,33 @@ public class EntryListScreen extends AppCompatActivity {
             String _otherInfo = data.getStringExtra("Other");
 
 
-            Entry newEntry = new Entry(_image,_name,_remark,_bday,_gender,_address,_contact,_hobbies,_otherInfo);
+           Entry newEntry = new Entry(_image,_name,_remark,_bday,_gender,_address,_contact,_hobbies,_otherInfo, account_id);
+
+           if(sqldbHelper.insertIntoEntryTable(account_id,
+                   _name,
+                   _remark,
+                   _bday,
+                   _gender,
+                   _contact,
+                   _hobbies,
+                   _otherInfo,
+                   _image,
+                   _address)){
+
+               Toast.makeText(c,"Successful!",Toast.LENGTH_LONG).show();
+               entryList.add(newEntry);
+               theCustomRVAdapter.notifyDataSetChanged();
 
 
-                    Toast.makeText(c,"Successful!",Toast.LENGTH_LONG).show();
-                    entryList.add(newEntry);
-                    theCustomRVAdapter.notifyDataSetChanged();
+
+           }
+
+
+
 
 
                 }
+
         else if (requestCode == REQUEST_CODE_FOR_EDIT && resultCode == RESULT_OK){
                 Toast.makeText(c, "Edit successful!", Toast.LENGTH_LONG).show();
                 Bundle extras = data.getExtras();

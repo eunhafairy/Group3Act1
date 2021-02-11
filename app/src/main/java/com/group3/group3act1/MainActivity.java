@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     Context c = this;
     SQLDBHelper myDb;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,14 +41,38 @@ public class MainActivity extends AppCompatActivity {
 
         bt_Login.setOnClickListener(bt_click);
         bt_Reg.setOnClickListener(bt_click);
-        myDb = new SQLDBHelper(c);
+
 
     }
 
     private void init() {
+
+        /*
         accountList.add(new Account("Anna", "13579abcdeA", "Anna Lisa"));
         accountList.add(new Account("Lorna", "Th3Q4ickBr0wnF0x", "Lorna Dee"));
         accountList.add(new Account("_Fe_", "p@zzW0rd", "Fe Rari"));
+
+        */
+
+
+
+        myDb = new SQLDBHelper(c);
+        /*
+        Cursor result = myDb.selectAllUsers();
+        if(result.getCount() == 0){
+            Toast.makeText(c, "No entries", Toast.LENGTH_SHORT).show();
+
+        }
+        else{
+            while(result.moveToNext()){
+                accountList.add(new Account(result.getString(2),
+                        result.getString(3),
+                        result.getString(1)));
+            }
+        }
+
+        */
+
         accountList.add(new Account("debug", "", "Debug"));
         eTxt_username = (EditText) findViewById(R.id.uname);
         eTxt_password = (EditText) findViewById(R.id.pword);
@@ -99,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
                  i.putExtra("Name", accountList.get(3).getName().toString());
                  startActivity(i);
 */
+
+                /*
                 for(int i = 0; i < accountList.size(); i++){
 
                     if(eTxt_username.getText().toString().equals(accountList.get(i).getUsername()) && eTxt_password.getText().toString().equals(accountList.get(i).getPassword())){
@@ -138,6 +167,56 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }
+                */
+
+                Cursor result = myDb.selectAllUsers();
+                if(result.getCount() == 0){
+                    Toast.makeText(c, "No entries", Toast.LENGTH_SHORT).show();
+
+                }
+                else{
+                    while(result.moveToNext()){
+                      if(result.getString(2).equals(eTxt_username.getText().toString()) && result.getString(3).equals(eTxt_password.getText().toString())){
+
+                          if(ContextCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED &&
+                                  ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+                              //ask permission
+                              ActivityCompat.requestPermissions(MainActivity.this,
+                                      new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                                      REQ_CODE_WRITE_READ_PERMISSION );
+
+                          }
+                          else{
+                              Toast.makeText(MainActivity.this, "login successful", Toast.LENGTH_SHORT).show();
+                              Intent intent = new Intent(c, EntryListScreen.class);
+                              intent.putExtra("Name", result.getString(1));
+                              intent.putExtra("accountID", result.getString(0));
+                              startActivity(intent);
+                              return;
+                          }
+
+
+                      }
+                      else if (result.isLast()){
+                          builder.setTitle("Alert")
+                                  .setMessage("The username or password is incorrect.")
+                                  .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                                      @Override
+                                      public void onClick(DialogInterface dialog, int which) {
+                                          //code
+                                          eTxt_password.setText("");
+                                          eTxt_username.setText("");
+                                      }
+                                  })
+                                  .setCancelable(true);
+                          AlertDialog dialog = builder.create();
+                          dialog.show();
+
+                      }
+                    }
+                }
+
+
 
 
              }
@@ -180,12 +259,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_CODE_FOR_REGISTRATION && resultCode == RESULT_OK){
+
+            /*
             Bundle extras = data.getExtras();
             String _username = extras.getString("Username");
             String _password = extras.getString("Password");
             String _name = extras.getString("Name");
             Account _account = new Account(_username, _password, _name);
             accountList.add(_account);
+            */
 
 
         }
