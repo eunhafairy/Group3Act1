@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 public class SQLDBHelper extends SQLiteOpenHelper {
 
     private static String DATABASE_NAME = "myDatabase.db";
-    private static int VERSION = 7;
+    private static int VERSION = 8;
     Context context;
     public SQLDBHelper( Context context) {
         super(context, DATABASE_NAME, null, VERSION);

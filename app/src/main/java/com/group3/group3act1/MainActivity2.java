@@ -441,35 +441,30 @@ public class MainActivity2 extends AppCompatActivity {
            @Override
            public void onClick(View v) {
 
-               Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File tempImage = null;
-               try {
-                   tempImage = createImage();
-               } catch (Exception e) {
-                   e.printStackTrace();
+               if(ContextCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                   ActivityCompat.requestPermissions(MainActivity2.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
+
+
                }
-               if(tempImage != null) {
-                   Uri uriImage = FileProvider.getUriForFile(c,
-                           "com.group3.group3act1.fileprovider",
-                           tempImage);
-                   _CurrentPhotoUri = uriImage;
-                   camera.putExtra(MediaStore.EXTRA_OUTPUT, uriImage);
-
-
-                   if(ContextCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                       ActivityCompat.requestPermissions(MainActivity2.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
-
-
+               else{
+                   Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                   File tempImage = null;
+                   try {
+                       tempImage = createImage();
+                   } catch (Exception e) {
+                       e.printStackTrace();
                    }
-                   else{
-
+                   if(tempImage != null) {
+                       Uri uriImage = FileProvider.getUriForFile(c,
+                               "com.group3.group3act1.fileprovider",
+                               tempImage);
+                       _CurrentPhotoUri = uriImage;
+                       camera.putExtra(MediaStore.EXTRA_OUTPUT, uriImage);
                        startActivityForResult(camera, REQUEST_CODE_CAMERA);
+
+
                    }
-
-               }
-
-
-
+      }
 
            }
        });

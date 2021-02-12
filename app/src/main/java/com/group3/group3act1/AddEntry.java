@@ -46,7 +46,7 @@ public class AddEntry extends AppCompatActivity {
     final int REQ_CODE_CAMERA = 12;
     Context c = this;
     //button
-    Button submitBtn;
+    Button submitBtn, cancelBtn;
     //edit text
     EditText name, position, birthDate, address, contactInfo, hobbies, otherInfo;
     RadioGroup gender;
@@ -83,6 +83,7 @@ public class AddEntry extends AppCompatActivity {
 
         //init button
         submitBtn = (Button) findViewById(R.id.addEntry_submitButton);
+        cancelBtn = (Button) findViewById(R.id.addEntry_cancelButton);
 
         //init edit text
         name = (EditText) findViewById(R.id.addEntry_nameEdit);
@@ -116,6 +117,14 @@ public class AddEntry extends AppCompatActivity {
 
     private void reg() {
 
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
         //builder for alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
 
@@ -123,34 +132,36 @@ public class AddEntry extends AppCompatActivity {
         imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if(ContextCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(AddEntry.this, new String[]{Manifest.permission.CAMERA}, REQ_CODE_CAMERA);
 
-                File tempImage = null;
-                try {
-                    tempImage = createImage();
-                } catch (Exception e) {
-                    e.printStackTrace();
+
                 }
+                else{
+                    Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-                if(tempImage != null){
-                    Uri uriImage = FileProvider.getUriForFile(c,
-                            "com.group3.group3act1.fileprovider",
-                            tempImage);
-                    mCurrentPhotoUri = uriImage;
-                    camera.putExtra(MediaStore.EXTRA_OUTPUT, uriImage);
-
-                    if(ContextCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                        ActivityCompat.requestPermissions(AddEntry.this, new String[]{Manifest.permission.CAMERA}, REQ_CODE_CAMERA);
-
-
+                    File tempImage = null;
+                    try {
+                        tempImage = createImage();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    else{
 
+                    if(tempImage != null){
+                        Uri uriImage = FileProvider.getUriForFile(c,
+                                "com.group3.group3act1.fileprovider",
+                                tempImage);
+                        mCurrentPhotoUri = uriImage;
+                        camera.putExtra(MediaStore.EXTRA_OUTPUT, uriImage);
                         startActivityForResult(camera, REQUEST_CODE_CAMERA_ADD_ENTRY);
+
+
+
                     }
 
 
                 }
+
             }
         });
 

@@ -232,7 +232,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
                 builder.setTitle("Alert")
                         .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                             @Override
